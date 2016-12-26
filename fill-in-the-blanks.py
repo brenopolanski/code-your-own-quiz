@@ -54,16 +54,17 @@ def ask_question(mad_lib, blank_num, answers, max_attempts = 4):
   """Takes the current mad_lib (str), current_question (int), and
   answer (str). Returns the partially answered madlib (or None if the user
   takes too many guesses) and the number of the next blank."""
+  limit_attempts = 1
   attempts_left = max_attempts
   to_replace = "___" + str(blank_num) + "___"
   prompt = make_display(mad_lib, to_replace, attempts_left, max_attempts)
   user_guess = input(prompt).lower()
-  while user_guess != answers.lower() and attempts_left > 1:
+  while user_guess != answers.lower() and attempts_left > limit_attempts:
     attempts_left -= 1
     prompt = make_display(mad_lib, to_replace, attempts_left, max_attempts)
     user_guess = input(prompt).lower()
 
-  if attempts_left > 1:
+  if attempts_left > limit_attempts:
     print("\nCorrect!\n")
     return (mad_lib.replace(to_replace, answers), blank_num + 1)
 
@@ -76,16 +77,17 @@ def make_display(current_mad_lib, to_replace, attempts_left, max_attempts):
   prompt = "\nThe current paragraph reads as such:\n{}\n\n"
   prompt += "What should be substituted in for {}? "
   prompt = prompt.format(current_mad_lib, to_replace)
+  limit_attempts = 1
   if attempts_left == max_attempts:
     return prompt
-  new_prompt = "That isn't the correct answer!  "
+  new_prompt = "That isn't the correct answer! "
   if attempts_left == max_attempts:
     return prompt
-  new_prompt = "That isn't the correct answer!  "
-  if attempts_left > 1:
+  new_prompt = "That isn't the correct answer! "
+  if attempts_left > limit_attempts:
     new_prompt += "Let's try again; you have {} trys left!\n\n"
   else:
-    new_prompt += 'You only have {} try left!  Make it count!\n\n'
+    new_prompt += "You only have {} try left!  Make it count!\n\n"
   return new_prompt.format(attempts_left) + prompt
 
 
